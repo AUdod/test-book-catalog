@@ -11,17 +11,19 @@ import { Component, Vue } from "vue-property-decorator";
 import UserService from "@/services/UserService";
 
 @Component
-export default class Home extends Vue {
+export default class UserBoard extends Vue {
   private content = "";
 
   mounted() {
-    UserService.getPublicContent().then(
+    UserService.getUserBoard().then(
       (response) => {
         this.content = response.data;
       },
       (error) => {
         this.content =
-          (error.response && error.response.data) ||
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
           error.message ||
           error.toString();
       }
