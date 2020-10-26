@@ -12,7 +12,6 @@
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/vue-fontawesome": "^2.0.0",
     "axios": "^0.20.0",
-    "bootstrap": "^4.5.2",
     "core-js": "^3.6.5",
     "jquery": "^3.5.1",
     "popper.js": "^1.16.1",
@@ -21,6 +20,7 @@
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^8.4.2",
     "vue-router": "^3.4.3",
+    "vuetify": "^2.3.15",
     "vuex": "^3.5.1",
     "vuex-class": "^0.3.2",
     "vuex-module-decorators": "^0.17.0"

@@ -1,73 +1,58 @@
 <template>
-  <div class="col-md-12">
-    <div class="card card-container">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
-      />
-      <form name="form" @submit.prevent="handleRegister">
-        <div v-if="!successful">
-          <div class="form-group">
-            <label for="username">Username</label>
-            <input
-              v-model="user.username"
-              v-validate="'required|min:3|max:20'"
-              type="text"
-              class="form-control"
-              name="username"
-            />
-            <div
-              v-if="submitted && errors.has('username')"
-              class="alert-danger"
-            >
-              {{ errors.first("username") }}
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input
-              v-model="user.email"
-              v-validate="'required|email|max:50'"
-              type="email"
-              class="form-control"
-              name="email"
-            />
-            <div v-if="submitted && errors.has('email')" class="alert-danger">
-              {{ errors.first("email") }}
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input
-              v-model="user.password"
-              v-validate="'required|min:6|max:40'"
-              type="password"
-              class="form-control"
-              name="password"
-            />
-            <div
-              v-if="submitted && errors.has('password')"
-              class="alert-danger"
-            >
-              {{ errors.first("password") }}
-            </div>
-          </div>
-          <div class="form-group">
-            <button class="btn btn-primary btn-block">Sign Up</button>
-          </div>
-        </div>
-      </form>
+  <v-card class="mx-auto pl-5 pr-5 pb-5">
+    <v-img
+      id="profile-img"
+      src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+      class="rounded-circle mx-auto mt-5 mb-5"
+      max-height="150"
+      max-width="150"
+    />
+    <v-form
+      name="form"
+      v-model="valid"
+      @submit.prevent="handleRegister"
+      modellazy-validation
+    >
+      <div v-if="!successful">
+        <v-text-field
+          v-model="user.username"
+          :rules="nameRules"
+          label="Username"
+          required
+        ></v-text-field>
 
-      <div
-        v-if="message"
-        class="alert"
-        :class="successful ? 'alert-success' : 'alert-danger'"
-      >
-        {{ message }}
+        <v-text-field
+          v-model="user.email"
+          :rules="emailRules"
+          label="Email"
+          required
+        ></v-text-field>
+
+        <v-text-field
+          :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
+          v-model="user.password"
+          :rules="passRules"
+          label="Password"
+          required
+          :type="showPass ? 'text' : 'password'"
+          @click:append="showPass = !showPass"
+        ></v-text-field>
+
+        <v-btn :disabled="!valid" color="success" type="submit">
+          Sign Up
+        </v-btn>
       </div>
-    </div>
-  </div>
+    </v-form>
+
+    <v-alert
+      v-if="message"
+      dense
+      :type="successful ? 'success' : 'error'"
+      class="mt-4 mb-0"
+    >
+      {{ message }}
+    </v-alert>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -78,11 +63,29 @@ const Auth = namespace("Auth");
 @Component
 export default class Register extends Vue {
   [x: string]: any;
+  valid = true;
   private user: any = {
     username: "",
     email: "",
     password: "",
   };
+  showPass = false;
+  nameRules = [
+    (v: any) => !!v || "Name is required",
+    (v: any) =>
+      (v && v.length >= 3 && v.length <= 20) ||
+      "Password must be more than 3 and less than 20 characters",
+  ];
+  passRules = [
+    (v: any) => !!v || "Password is required",
+    (v: any) =>
+      (v && v.length >= 6) || "Password must be more than 6 characters",
+  ];
+
+  emailRules = [
+    (v: any) => !!v || "E-mail is required",
+    (v: string) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+  ];
 
   private submitted = false;
   private successful = false;

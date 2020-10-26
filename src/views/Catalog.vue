@@ -1,9 +1,5 @@
 <template>
-  <div class="container">
-    <header class="jumbotron">
-      <h3>{{ content }}</h3>
-    </header>
-  </div>
+  <div class="container"></div>
 </template>
 
 <script lang="ts">

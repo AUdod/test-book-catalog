@@ -1,66 +1,78 @@
 <template>
-  <div id="app">
-    <nav class="navbar navbar-expand navbar-dark bg-dark">
-      <a href class="navbar-brand" @click.prevent>Book Catalog</a>
-      <div class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <router-link to="/home" class="nav-link">
-            <font-awesome-icon icon="home" /> Home
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link v-if="currentUser" to="/user" class="nav-link"
-            >User</router-link
-          >
-        </li>
-      </div>
+  <v-app id="app">
+    <Header :drawer.sync="drawer" />
+    <v-navigation-drawer v-model="drawer" absolute>
+      <v-list nav dense>
+        <v-list-item-group
+          v-model="group"
+          active-class="deep-purple--text text--accent-4"
+        >
+          <v-list-item to="/" v-if="currentUser">
+            <v-list-item-title>
+              <v-icon>mdi-home</v-icon> Catalog</v-list-item-title
+            >
+          </v-list-item>
 
-      <div v-if="!currentUser" class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <router-link to="/register" class="nav-link">
-            <font-awesome-icon icon="user-plus" /> Sign Up
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="/login" class="nav-link">
-            <font-awesome-icon icon="sign-in-alt" /> Login
-          </router-link>
-        </li>
-      </div>
+          <v-list-item to="/register" v-if="!currentUser">
+            <v-list-item-title>
+              <v-icon>mdi-account-plus</v-icon> Sign Up
+            </v-list-item-title>
+          </v-list-item>
 
-      <div v-if="currentUser" class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <router-link to="/profile" class="nav-link">
-            <font-awesome-icon icon="user" />
-            {{ currentUser.username }}
-          </router-link>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href @click.prevent="logOut">
-            <font-awesome-icon icon="sign-out-alt" /> LogOut
-          </a>
-        </li>
-      </div>
-    </nav>
+          <v-list-item to="/login" v-if="!currentUser">
+            <v-list-item-title>
+              <v-icon>mdi-account</v-icon> Login
+            </v-list-item-title>
+          </v-list-item>
 
-    <div class="container">
-      <router-view />
-    </div>
-  </div>
+          <v-list-item to="/profile" v-if="currentUser">
+            <v-list-item-title>
+              <v-icon>mdi-account</v-icon> {{ currentUser.username }}
+            </v-list-item-title>
+          </v-list-item>
+          <v-list-item @click.prevent="logOut" v-if="currentUser">
+            <v-list-item-title>
+              <v-icon>mdi-exit-run</v-icon> LogOut
+            </v-list-item-title>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-navigation-drawer>
+    <v-container class="fill-height">
+      <transition name="router-fade" mode="out-in">
+        <router-view></router-view>
+      </transition>
+    </v-container>
+  </v-app>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
+import Header from "@/components/Header.vue";
 const Auth = namespace("Auth");
 
-@Component
+@Component({
+  components: {
+    Header,
+  },
+  watch: {
+    group() {
+      this.$emit("update:drawer", false);
+    },
+  },
+})
 export default class App extends Vue {
   @Auth.State("user")
   private currentUser!: any;
 
   @Auth.Action
   private signOut!: () => void;
+
+  logOut() {
+    this.signOut();
+    this.$router.push("/login");
+  }
 
   /* get showAdminBoard(): boolean {
     if (this.currentUser && this.currentUser.roles) {
@@ -69,7 +81,6 @@ export default class App extends Vue {
 
     return false;
   } */
-
   /*   get showModeratorBoard(): boolean {
     if (this.currentUser && this.currentUser.roles) {
       return this.currentUser.roles.includes("ROLE_MODERATOR");
@@ -77,10 +88,21 @@ export default class App extends Vue {
 
     return false;
   } */
-
-  logOut() {
-    this.signOut();
-    this.$router.push("/login");
-  }
+  drawer = false;
+  group = null;
 }
 </script>
+
+<style lang="scss">
+.router-fade-enter-active {
+  transition: all 0.3s ease;
+}
+.router-fade-leave-active {
+  transition: all 0.3s cubic-bezier(0.5, 0.3, 0.4, 0.5);
+}
+.router-fade-enter, .router-fade-leave-to
+/* .slide-fade-leave-active below version 2.1.8 */ {
+  transform: translateX(10px);
+  opacity: 0;
+}
+</style>
