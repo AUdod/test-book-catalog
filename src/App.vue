@@ -7,7 +7,7 @@
           v-model="group"
           active-class="deep-purple--text text--accent-4"
         >
-          <v-list-item to="/" v-if="currentUser">
+          <v-list-item to="/">
             <v-list-item-title>
               <v-icon>mdi-home</v-icon> Catalog</v-list-item-title
             >
@@ -47,22 +47,49 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { namespace } from "vuex-class";
+import { BookInterface } from "./interfaces";
 import Header from "@/components/Header.vue";
 const Auth = namespace("Auth");
+const Books = namespace("Books");
 
 @Component({
   components: {
     Header,
   },
-  watch: {
+  /* watch: {
     group() {
+      console.log("group");
       this.$emit("update:drawer", false);
     },
-  },
+  }, */
 })
 export default class App extends Vue {
+  @Books.Getter
+  private books!: Array<BookInterface>;
+
+  @Books.Action
+  private updateEditedBook!: (book: BookInterface) => void;
+
+  @Watch("$route", { deep: true })
+  onBookChanged(to: any, from: any) {
+    console.log("$route", this.$route);
+    if (this.$route.name === "bookEdit") {
+      let _curr = {} as BookInterface;
+      this.books.forEach((el: BookInterface) => {
+        if (el.id == this.$route.params.id) _curr = el;
+      });
+      this.updateEditedBook(_curr);
+    }
+    if (this.$route.name === "bookNew") {
+      const _curr = {} as BookInterface;
+      _curr.id = `b${(+new Date()).toString(16)}`;
+      _curr.title = "Новая книга";
+      this.updateEditedBook(_curr);
+    }
+  }
+
   @Auth.State("user")
   private currentUser!: any;
 

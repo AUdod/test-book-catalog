@@ -3,6 +3,8 @@ import VueRouter, { RouteConfig } from "vue-router";
 import Catalog from "../views/Catalog.vue";
 import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
+import BookItem from "../views/BookItem.vue";
+import BookItemEdit from "../views/BookItemEdit.vue";
 
 Vue.use(VueRouter);
 
@@ -12,6 +14,25 @@ const routes: Array<RouteConfig> = [
     name: "catalog",
     component: Catalog
   },
+
+  {
+    path: "/book/:id",
+    name: "book",
+    component: BookItem
+  },
+
+  {
+    path: "/book/:id/edit",
+    name: "bookEdit",
+    component: BookItemEdit
+  },
+
+  {
+    path: "/new-book",
+    name: "bookNew",
+    component: BookItemEdit
+  },
+
   {
     path: "/login",
     component: Login
@@ -25,11 +46,6 @@ const routes: Array<RouteConfig> = [
     name: "profile",
     // lazy-loaded
     component: () => import("../views/Profile.vue")
-  },
-  {
-    path: "/user",
-    name: "user",
-    component: () => import("../views/BoardUser.vue")
   }
 ];
 
@@ -40,7 +56,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ["/login", "/register", "/home"];
+  const publicPages = ["/login", "/register", "/"];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem("user");
 

@@ -54,7 +54,7 @@ export default class Login extends Vue {
     (v: any) =>
       (v && v.length >= 6) || "Password must be more than 6 characters",
   ];
-  valid = true;
+  private valid = true;
   showPass = false;
   private user: any = {
     username: "",

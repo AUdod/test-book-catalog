@@ -13,7 +13,7 @@
     <v-tabs icons-and-text class="hidden-sm-and-down">
       <v-tabs-slider></v-tabs-slider>
 
-      <v-tab to="/" v-if="currentUser">
+      <v-tab to="/">
         Catalog
         <v-icon>mdi-home</v-icon>
       </v-tab>
