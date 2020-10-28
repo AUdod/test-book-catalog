@@ -1,5 +1,5 @@
 import { VuexModule, Module, Mutation, Action } from "vuex-module-decorators";
-import firebaseApp from "@/services/firebaseInit";
+import { fStore } from "@/services/firebaseInit";
 import { BookInterface } from "@/interfaces";
 import firebase from "firebase";
 @Module({ namespaced: true })
@@ -48,14 +48,10 @@ class Books extends VuexModule {
     });
 
     if (noID) {
-      await firebaseApp
-        .firestore()
-        .collection("books")
-        .add(this.editedBook);
+      await fStore.collection("books").add(this.editedBook);
       this.context.commit("addBook", this.editedBook);
     } else {
-      await firebaseApp
-        .firestore()
+      await fStore
         .collection("books")
         .where("id", "==", this.editedBook.id)
         .get()
@@ -75,8 +71,7 @@ class Books extends VuexModule {
 
   @Action
   async deleteBookAction(book: any): Promise<void> {
-    await firebaseApp
-      .firestore()
+    await fStore
       .collection("books")
       .where("id", "==", book.id)
       .get()
@@ -92,8 +87,7 @@ class Books extends VuexModule {
   @Action
   async initBookList(): Promise<void> {
     const bl: Array<Record<string, any>> = [];
-    await firebaseApp
-      .firestore()
+    await fStore
       .collection("books")
       .get()
       .then(querySnapshot => {

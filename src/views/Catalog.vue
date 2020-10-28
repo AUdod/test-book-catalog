@@ -63,7 +63,7 @@
                 color="warning"
                 :to="'/book/' + book.id + '/edit'"
               >
-                Редактироваить
+                Редактировать
                 <v-icon dark>
                   mdi-circle-edit-outline
                 </v-icon>
@@ -90,33 +90,19 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
+import { BookInterface } from "@/interfaces";
 
 const Books = namespace("Books");
 const Auth = namespace("Auth");
 
-interface BookInterface {
-  id: string;
-  title: string;
-  author: string;
-  publicationDate: Date;
-  translationDate: Date;
-  pages: number;
-  description: string;
-  isbn: string;
-  publisher: string;
-  coverSrc: string;
-}
-
 @Component
 export default class Home extends Vue {
   private isLoading = true;
-  mounted() {
-    this.initBookList().then(() => {
-      this.isLoading = false;
-    });
-  }
 
   private content = "";
+
+  @Auth.State("user")
+  private currentUser!: any;
 
   @Books.Getter
   private books!: Array<BookInterface>;
@@ -127,21 +113,11 @@ export default class Home extends Vue {
   @Books.Action
   private deleteBookAction!: (book: any) => void;
 
-  @Auth.State("user")
-  private currentUser!: any;
-  /*   mounted() {
-    UserService.getPublicContent().then(
-      (response) => {
-        this.content = response.data;
-      },
-      (error) => {
-        this.content =
-          (error.response && error.response.data) ||
-          error.message ||
-          error.toString();
-      }
-    );
-  } */
+  mounted() {
+    this.initBookList().then(() => {
+      this.isLoading = false;
+    });
+  }
 }
 </script>
 <style lang="scss">

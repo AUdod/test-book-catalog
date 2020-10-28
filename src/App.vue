@@ -66,6 +66,9 @@ const Books = namespace("Books");
   }, */
 })
 export default class App extends Vue {
+  drawer = false;
+  group = null;
+
   @Books.Getter
   private books!: Array<BookInterface>;
 
@@ -74,27 +77,6 @@ export default class App extends Vue {
 
   @Books.Action
   private initBookList!: () => void;
-
-  @Watch("$route", { deep: true })
-  onBookChanged(to: any, from: any) {
-    if (this.$route.name === "bookEdit") {
-      let _curr = {} as BookInterface;
-      this.books.forEach((el: BookInterface) => {
-        if (el.id == this.$route.params.id) _curr = el;
-      });
-      /* console.log(_curr); */
-      this.updateEditedBook(_curr);
-    }
-    if (this.$route.name === "bookNew") {
-      const _curr = {} as BookInterface;
-      _curr.id = `b${(+new Date()).toString(16)}`;
-      _curr.title = "Новая книга";
-      this.updateEditedBook(_curr);
-    }
-    /* if (this.$route.name === "catalog") {
-      this.initBookList();
-    } */
-  }
 
   @Auth.State("user")
   private currentUser!: any;
@@ -121,8 +103,27 @@ export default class App extends Vue {
 
     return false;
   } */
-  drawer = false;
-  group = null;
+
+  @Watch("$route", { deep: true })
+  onBookChanged(to: any, from: any) {
+    if (this.$route.name === "bookEdit") {
+      let _curr = {} as BookInterface;
+      this.books.forEach((el: BookInterface) => {
+        if (el.id == this.$route.params.id) _curr = el;
+      });
+      /* console.log(_curr); */
+      this.updateEditedBook(_curr);
+    }
+    if (this.$route.name === "bookNew") {
+      const _curr = {} as BookInterface;
+      _curr.id = `b${(+new Date()).toString(16)}`;
+      _curr.title = "Новая книга";
+      this.updateEditedBook(_curr);
+    }
+    /* if (this.$route.name === "catalog") {
+      this.initBookList();
+    } */
+  }
 }
 </script>
 

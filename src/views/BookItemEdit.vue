@@ -150,26 +150,14 @@ const Auth = namespace("Auth");
 
 @Component
 export default class BookItemEdit extends Vue {
+  valid = true;
+
   private isLoading = false;
   private menuDate1 = false;
   private menuDate2 = false;
 
-  goBack() {
-    this.$router.go(-1);
-  }
-
-  mounted() {
-    if (this.$route.params.id && !this.editedBookGet.id) {
-      this.$router.push("/book/" + this.$route.params.id);
-    } else if (!this.$route.params.id && !this.editedBookGet.id) {
-      this.$router.push("/");
-    }
-  }
-
-  @Watch("$route", { deep: true })
-  onPersonChanged1(to: any, from: any) {
-    console.log("$route");
-  }
+  @Books.Action
+  private saveEditedBook!: () => Promise<void>;
 
   @Books.Action
   private deleteBookAction!: (book: any) => void;
@@ -177,12 +165,11 @@ export default class BookItemEdit extends Vue {
   @Books.Getter
   private books!: Array<BookInterface>;
 
-  get currentBook() {
-    let _curr;
-    this.books.forEach((el) => {
-      if (el.id == this.$route.params.id) _curr = el;
-    });
-    return _curr;
+  @Books.Getter
+  private editedBookGet!: BookInterface;
+
+  goBack() {
+    this.$router.go(-1);
   }
 
   deleteAndLeave() {
@@ -198,14 +185,13 @@ export default class BookItemEdit extends Vue {
     });
   }
 
-  @Books.Getter
-  private editedBookGet!: BookInterface;
-
-  @Books.Action
-  private saveEditedBook!: () => Promise<void>;
-
-  valid = true;
-  private loading = false;
+  get currentBook() {
+    let _curr;
+    this.books.forEach((el) => {
+      if (el.id == this.$route.params.id) _curr = el;
+    });
+    return _curr;
+  }
 
   /*   get currentBook() {
     let _curr = {} as BookInterface;
@@ -216,6 +202,14 @@ export default class BookItemEdit extends Vue {
   }
  */
   /* set currentBook(book: BookInterface) {} */
+
+  mounted() {
+    if (this.$route.params.id && !this.editedBookGet.id) {
+      this.$router.push("/book/" + this.$route.params.id);
+    } else if (!this.$route.params.id && !this.editedBookGet.id) {
+      this.$router.push("/");
+    }
+  }
 }
 </script>
 

@@ -1,5 +1,5 @@
 import { VuexModule, Module, Mutation, Action } from "vuex-module-decorators";
-import firebaseApp from "@/services/firebaseInit";
+import { fbAuth } from "@/services/firebaseInit";
 
 const storedUser = localStorage.getItem("user");
 
@@ -38,43 +38,36 @@ class User extends VuexModule {
 
   @Action({ rawError: true })
   login(data: any): Promise<any> {
-    return firebaseApp
-      .auth()
-      .signInWithEmailAndPassword(data.email, data.password)
-      .then(
-        user => {
-          localStorage.setItem("user", JSON.stringify(user.user));
-          this.context.commit("loginSuccess", user.user);
-          return Promise.resolve(user);
-        },
-        error => {
-          this.context.commit("loginFailure");
-          const message =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString();
-          return Promise.reject(message);
-        }
-      );
+    return fbAuth.signInWithEmailAndPassword(data.email, data.password).then(
+      user => {
+        localStorage.setItem("user", JSON.stringify(user.user));
+        this.context.commit("loginSuccess", user.user);
+        return Promise.resolve(user);
+      },
+      error => {
+        this.context.commit("loginFailure");
+        const message =
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString();
+        return Promise.reject(message);
+      }
+    );
   }
 
   @Action
   signOut(): void {
-    firebaseApp
-      .auth()
-      .signOut()
-      .then(() => {
-        localStorage.removeItem("user");
-        this.context.commit("logout");
-      });
+    fbAuth.signOut().then(() => {
+      localStorage.removeItem("user");
+      this.context.commit("logout");
+    });
   }
 
   @Action({ rawError: true })
   register(data: any): Promise<any> {
-    return firebaseApp
-      .auth()
+    return fbAuth
       .createUserWithEmailAndPassword(data.email, data.password)
       .then(
         user => {

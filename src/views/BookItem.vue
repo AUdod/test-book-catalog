@@ -64,25 +64,16 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { namespace } from "vuex-class";
+import { BookInterface } from "@/interfaces";
 
 const Books = namespace("Books");
 const Auth = namespace("Auth");
 
-interface BookInterface {
-  id: string;
-  title: string;
-  author: string;
-  publicationDate: Date;
-  translationDate: Date;
-  pages: number;
-  description: string;
-  isbn: string;
-  publisher: string;
-  coverSrc: string;
-}
-
 @Component
 export default class BookItem extends Vue {
+  @Auth.State("user")
+  private currentUser!: any;
+
   @Books.Getter
   private books!: Array<BookInterface>;
 
@@ -101,9 +92,6 @@ export default class BookItem extends Vue {
     });
     return _curr;
   }
-
-  @Auth.State("user")
-  private currentUser!: any;
 }
 </script>
 

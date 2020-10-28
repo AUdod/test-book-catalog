@@ -2,4 +2,6 @@ import firebase from "firebase";
 import "firebase/firestore";
 import firebaseConfig from "./firebaseConfig";
 const firebaseApp = firebase.initializeApp(firebaseConfig);
-export default firebaseApp;
+const fbAuth = firebaseApp.auth();
+const fStore = firebaseApp.firestore();
+export { firebaseApp, fbAuth, fStore };
