@@ -116,14 +116,23 @@
         ></v-textarea>
         <v-card-actions>
           <v-btn outlined rounded class="" @click="goBack()" color="info">
-            back
+            Назад
+            <v-icon dark>
+              mdi-arrow-left-circle
+            </v-icon>
           </v-btn>
           <v-spacer></v-spacer>
-          <v-btn outlined rounded color="warning" @click="saveAndLeave()">
-            Save
+          <v-btn outlined rounded color="success" @click="saveAndLeave()">
+            Сохранить
+            <v-icon dark>
+              mdi-content-save-edit-outline
+            </v-icon>
           </v-btn>
           <v-btn outlined rounded color="error" @click="deleteAndLeave()">
-            Delete
+            Удалить
+            <v-icon dark>
+              mdi-trash-can-outline
+            </v-icon>
           </v-btn>
         </v-card-actions>
       </v-form>

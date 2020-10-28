@@ -11,11 +11,18 @@
       <v-spacer></v-spacer>
     </div>
     <div v-else>
-      <v-btn outlined rounded class="mb-5" to="/new-book" color="info">
+      <v-btn
+        outlined
+        rounded
+        class="mb-5"
+        to="/new-book"
+        color="info"
+        v-if="currentUser"
+      >
         <v-icon dark>
           mdi-plus
         </v-icon>
-        add New book
+        Добавить книгу
       </v-btn>
 
       <v-card class="mb-5" v-for="book in books" :key="book.id">
@@ -56,7 +63,10 @@
                 color="warning"
                 :to="'/book/' + book.id + '/edit'"
               >
-                Edit
+                Редактироваить
+                <v-icon dark>
+                  mdi-circle-edit-outline
+                </v-icon>
               </v-btn>
               <v-btn
                 outlined
@@ -64,7 +74,10 @@
                 color="error"
                 @click="deleteBookAction(book)"
               >
-                Delete
+                Удалить
+                <v-icon dark>
+                  mdi-trash-can-outline
+                </v-icon>
               </v-btn>
             </v-card-actions>
           </div>

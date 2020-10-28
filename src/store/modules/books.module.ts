@@ -98,10 +98,8 @@ class Books extends VuexModule {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          console.log(doc.data());
           bl.push(doc.data());
         });
-        console.log(querySnapshot);
         this.context.commit("setBooksList", bl);
       });
   }

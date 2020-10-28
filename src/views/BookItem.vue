@@ -2,7 +2,11 @@
   <v-card class="mb-5 w-inherit">
     <v-row>
       <v-col cols="12" md="3">
-        <v-img :src="currentBook.coverSrc" class="book-cover " /> </v-col
+        <v-img
+          :src="currentBook.coverSrc"
+          class="book-cover "
+          contain
+        /> </v-col
       ><v-col cols="12" md="9">
         <v-card-title> {{ currentBook.title }} </v-card-title>
         <v-card-subtitle> {{ currentBook.author }}</v-card-subtitle>
@@ -30,7 +34,10 @@
     >
     <v-card-actions v-if="currentUser">
       <v-btn outlined rounded class="" to="/" color="info">
-        back
+        Назад
+        <v-icon dark>
+          mdi-arrow-left-circle
+        </v-icon>
       </v-btn>
       <v-spacer></v-spacer>
       <v-btn
@@ -39,10 +46,16 @@
         color="warning"
         :to="'/book/' + currentBook.id + '/edit'"
       >
-        Edit
+        Редактировать
+        <v-icon dark>
+          mdi-circle-edit-outline
+        </v-icon>
       </v-btn>
       <v-btn outlined rounded color="error" @click="deleteAndLeave()">
-        Delete
+        Удалить
+        <v-icon dark>
+          mdi-trash-can-outline
+        </v-icon>
       </v-btn>
     </v-card-actions>
   </v-card>

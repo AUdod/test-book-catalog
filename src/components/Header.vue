@@ -14,16 +14,16 @@
       <v-tabs-slider></v-tabs-slider>
 
       <v-tab to="/">
-        Catalog
+        Каталог
         <v-icon>mdi-home</v-icon>
       </v-tab>
       <v-spacer></v-spacer>
       <v-tab to="/register" v-if="!currentUser">
-        Sign Up
+        Регистрация
         <v-icon>mdi-account-plus</v-icon>
       </v-tab>
       <v-tab to="/login" v-if="!currentUser">
-        Login
+        Вход
         <v-icon>mdi-account</v-icon>
       </v-tab>
       <v-tab to="/profile" v-if="currentUser">
@@ -31,7 +31,7 @@
         <v-icon>mdi-account</v-icon>
       </v-tab>
       <v-tab @click.prevent="logOut" v-if="currentUser">
-        LogOut
+        Выход
         <v-icon>mdi-exit-run</v-icon>
       </v-tab>
     </v-tabs>

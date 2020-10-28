@@ -1,24 +1,14 @@
 <template>
-  <div class="container">
-    <header class="jumbotron">
-      <h3>
-        <strong>{{ currentUser.displayName }}</strong> Profile
-      </h3>
-    </header>
-    <!--<p>
+  <v-card>
+    <v-card-title>Пользователь {{ currentUser.displayName }} </v-card-title>
+    <v-card-text><strong>Id:</strong> {{ currentUser.uid }}</v-card-text>
+    <v-card-text><strong>E-mail:</strong> {{ currentUser.email }}</v-card-text>
+  </v-card>
+  <!--<p>
       <strong>Token:</strong>
       {{ currentUser.accessToken.substring(0, 20) }} ...
       {{ currentUser.accessToken.substr(currentUser.accessToken.length - 20) }}
     </p> -->
-    <p>
-      <strong>Id:</strong>
-      {{ currentUser.uid }}
-    </p>
-    <p>
-      <strong>E-mail:</strong>
-      {{ currentUser.email }}
-    </p>
-  </div>
 </template>
 
 <script lang="ts">

@@ -1,38 +1,38 @@
 <template>
-  <v-app id="app">
+  <v-app id="app" background-color="grey">
     <Header :drawer.sync="drawer" />
     <v-navigation-drawer v-model="drawer" absolute>
       <v-list nav dense>
         <v-list-item-group
           v-model="group"
-          active-class="deep-purple--text text--accent-4"
+          active-class="cyan--text text--accent-4"
         >
           <v-list-item to="/">
             <v-list-item-title>
-              <v-icon>mdi-home</v-icon> Catalog</v-list-item-title
+              <v-icon>mdi-home</v-icon> Каталог</v-list-item-title
             >
           </v-list-item>
 
           <v-list-item to="/register" v-if="!currentUser">
             <v-list-item-title>
-              <v-icon>mdi-account-plus</v-icon> Sign Up
+              <v-icon>mdi-account-plus</v-icon> Регистрация
             </v-list-item-title>
           </v-list-item>
 
           <v-list-item to="/login" v-if="!currentUser">
             <v-list-item-title>
-              <v-icon>mdi-account</v-icon> Login
+              <v-icon>mdi-account</v-icon> Вход
             </v-list-item-title>
           </v-list-item>
 
           <v-list-item to="/profile" v-if="currentUser">
             <v-list-item-title>
-              <v-icon>mdi-account</v-icon> {{ currentUser.username }}
+              <v-icon>mdi-account</v-icon> {{ currentUser.displayName }}
             </v-list-item-title>
           </v-list-item>
           <v-list-item @click.prevent="logOut" v-if="currentUser">
             <v-list-item-title>
-              <v-icon>mdi-exit-run</v-icon> LogOut
+              <v-icon>mdi-exit-run</v-icon> Выход
             </v-list-item-title>
           </v-list-item>
         </v-list-item-group>
@@ -82,7 +82,7 @@ export default class App extends Vue {
       this.books.forEach((el: BookInterface) => {
         if (el.id == this.$route.params.id) _curr = el;
       });
-      console.log(_curr);
+      /* console.log(_curr); */
       this.updateEditedBook(_curr);
     }
     if (this.$route.name === "bookNew") {
