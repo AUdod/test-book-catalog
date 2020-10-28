@@ -1,11 +1,7 @@
 import { VuexModule, Module, Mutation, Action } from "vuex-module-decorators";
-import AuthService from "@/services/AuthService";
+import firebaseApp from "@/services/firebaseInit";
 
 const storedUser = localStorage.getItem("user");
-
-const useMock = true;
-
-const mockUsers = [{}];
 
 @Module({ namespaced: true })
 class User extends VuexModule {
@@ -42,48 +38,66 @@ class User extends VuexModule {
 
   @Action({ rawError: true })
   login(data: any): Promise<any> {
-    return AuthService.login(data.username, data.password).then(
-      user => {
-        this.context.commit("loginSuccess", user);
-        return Promise.resolve(user);
-      },
-      error => {
-        this.context.commit("loginFailure");
-        const message =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        return Promise.reject(message);
-      }
-    );
+    return firebaseApp
+      .auth()
+      .signInWithEmailAndPassword(data.email, data.password)
+      .then(
+        user => {
+          localStorage.setItem("user", JSON.stringify(user.user));
+          this.context.commit("loginSuccess", user.user);
+          return Promise.resolve(user);
+        },
+        error => {
+          this.context.commit("loginFailure");
+          const message =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          return Promise.reject(message);
+        }
+      );
   }
 
   @Action
   signOut(): void {
-    AuthService.logout();
-    this.context.commit("logout");
+    firebaseApp
+      .auth()
+      .signOut()
+      .then(() => {
+        localStorage.removeItem("user");
+        this.context.commit("logout");
+      });
   }
 
   @Action({ rawError: true })
   register(data: any): Promise<any> {
-    return AuthService.register(data.username, data.email, data.password).then(
-      response => {
-        this.context.commit("registerSuccess");
-        return Promise.resolve(response.data);
-      },
-      error => {
-        this.context.commit("registerFailure");
-        const message =
-          (error.response &&
-            error.response.data &&
-            error.response.data.message) ||
-          error.message ||
-          error.toString();
-        return Promise.reject(message);
-      }
-    );
+    return firebaseApp
+      .auth()
+      .createUserWithEmailAndPassword(data.email, data.password)
+      .then(
+        user => {
+          user.user
+            ? user.user.updateProfile({
+                displayName: data.username
+              })
+            : null;
+
+          this.context.commit("registerSuccess");
+          return Promise.resolve(user);
+        },
+        error => {
+          this.context.commit("registerFailure");
+          const message =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.message ||
+            error.toString();
+          return Promise.reject(message);
+        }
+      );
   }
 
   get isLoggedIn(): boolean {

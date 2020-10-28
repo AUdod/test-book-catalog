@@ -27,7 +27,7 @@
         <v-icon>mdi-account</v-icon>
       </v-tab>
       <v-tab to="/profile" v-if="currentUser">
-        {{ currentUser.username }}
+        {{ currentUser.displayName }}
         <v-icon>mdi-account</v-icon>
       </v-tab>
       <v-tab @click.prevent="logOut" v-if="currentUser">

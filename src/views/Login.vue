@@ -9,11 +9,12 @@
     />
     <v-form @submit.prevent="handleLogin" v-model="valid" modellazy-validation>
       <v-text-field
-        v-model="user.username"
-        :rules="nameRules"
-        label="Username"
+        v-model="user.email"
+        :rules="emailRules"
+        label="Email"
         required
       ></v-text-field>
+
       <v-text-field
         :append-icon="showPass ? 'mdi-eye' : 'mdi-eye-off'"
         v-model="user.password"
@@ -42,11 +43,9 @@ const Auth = namespace("Auth");
 @Component
 export default class Login extends Vue {
   [x: string]: any;
-  nameRules = [
-    (v: any) => !!v || "Name is required",
-    (v: any) =>
-      (v && v.length >= 3 && v.length <= 20) ||
-      "Password must be more than 3 and less than 20 characters",
+  emailRules = [
+    (v: any) => !!v || "E-mail is required",
+    (v: string) => /.+@.+\..+/.test(v) || "E-mail must be valid",
   ];
 
   passRules = [
@@ -57,7 +56,7 @@ export default class Login extends Vue {
   private valid = true;
   showPass = false;
   private user: any = {
-    username: "",
+    email: "",
     password: "",
   };
   private loading = false;
@@ -83,7 +82,7 @@ export default class Login extends Vue {
         return;
       }
 
-      if (this.user.username && this.user.password) {
+      if (this.user.email && this.user.password) {
         this.login(this.user).then(
           // eslint-disable-next-line @typescript-eslint/no-unused-vars
           (data) => {

@@ -2,20 +2,20 @@
   <div class="container">
     <header class="jumbotron">
       <h3>
-        <strong>{{ currentUser.username }}</strong> Profile
+        <strong>{{ currentUser.displayName }}</strong> Profile
       </h3>
     </header>
-    <p>
+    <!--<p>
       <strong>Token:</strong>
       {{ currentUser.accessToken.substring(0, 20) }} ...
       {{ currentUser.accessToken.substr(currentUser.accessToken.length - 20) }}
-    </p>
+    </p> -->
     <p>
       <strong>Id:</strong>
-      {{ currentUser.id }}
+      {{ currentUser.uid }}
     </p>
     <p>
-      <strong>Email:</strong>
+      <strong>E-mail:</strong>
       {{ currentUser.email }}
     </p>
   </div>

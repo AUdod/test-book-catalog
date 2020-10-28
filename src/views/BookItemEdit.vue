@@ -1,6 +1,18 @@
 <template>
   <v-card class="w-inherit">
-    <v-container>
+    <div class="d-flex" v-if="isLoading">
+      <v-spacer></v-spacer>
+      <v-progress-circular
+        :size="170"
+        :width="7"
+        indeterminate
+        color="cyan"
+        class="mt-5 mb-5"
+      ></v-progress-circular>
+      <v-spacer></v-spacer>
+    </div>
+
+    <v-container v-else>
       <v-form
         class=""
         @submit.prevent="handleEdit"
@@ -129,6 +141,7 @@ const Auth = namespace("Auth");
 
 @Component
 export default class BookItemEdit extends Vue {
+  private isLoading = false;
   private menuDate1 = false;
   private menuDate2 = false;
 
@@ -169,15 +182,18 @@ export default class BookItemEdit extends Vue {
   }
 
   saveAndLeave() {
-    this.saveEditedBook();
-    this.$router.push("/book/" + this.editedBookGet.id);
+    this.isLoading = true;
+    this.saveEditedBook().then(() => {
+      this.isLoading = false;
+      this.$router.push("/book/" + this.editedBookGet.id);
+    });
   }
 
   @Books.Getter
   private editedBookGet!: BookInterface;
 
   @Books.Action
-  private saveEditedBook!: () => void;
+  private saveEditedBook!: () => Promise<void>;
 
   valid = true;
   private loading = false;

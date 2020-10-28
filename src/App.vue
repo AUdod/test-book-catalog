@@ -72,14 +72,17 @@ export default class App extends Vue {
   @Books.Action
   private updateEditedBook!: (book: BookInterface) => void;
 
+  @Books.Action
+  private initBookList!: () => void;
+
   @Watch("$route", { deep: true })
   onBookChanged(to: any, from: any) {
-    console.log("$route", this.$route);
     if (this.$route.name === "bookEdit") {
       let _curr = {} as BookInterface;
       this.books.forEach((el: BookInterface) => {
         if (el.id == this.$route.params.id) _curr = el;
       });
+      console.log(_curr);
       this.updateEditedBook(_curr);
     }
     if (this.$route.name === "bookNew") {
@@ -88,6 +91,9 @@ export default class App extends Vue {
       _curr.title = "Новая книга";
       this.updateEditedBook(_curr);
     }
+    /* if (this.$route.name === "catalog") {
+      this.initBookList();
+    } */
   }
 
   @Auth.State("user")

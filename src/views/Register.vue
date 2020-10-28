@@ -111,7 +111,7 @@ export default class Register extends Vue {
       if (isValid) {
         this.register(this.user).then(
           (data) => {
-            this.message = data.message;
+            this.message = "Пользователь успешно зарегистрирован";
             this.successful = true;
           },
           (error) => {
